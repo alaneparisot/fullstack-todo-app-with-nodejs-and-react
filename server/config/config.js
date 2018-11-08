@@ -12,7 +12,8 @@ Example of config.json:
 {
   "development": {
     "MONGODB_URI": "mongodb://localhost:27017/HackerNewsReader",
-    "PORT": 3000
+    "PORT": 3000,
+    "SALT_ROUNDS": 10
   }
 }
 */
