@@ -4,7 +4,8 @@
   "description": "A simple to-do app to explore fullstack development, with Node.js and React",
   "main": "server/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npm start --prefix server",
+    "start-dev": "npm run start-dev --prefix server"
   },
   "repository": {
     "type": "git",
