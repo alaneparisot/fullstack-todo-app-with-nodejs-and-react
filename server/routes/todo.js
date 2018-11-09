@@ -6,6 +6,30 @@ const User = require('../models/User');
 
 const router = express.Router();
 
+router.delete('/:id', passport.authenticate('jwt', {session: false}),
+  async (req, res) => {
+    try {
+      let user = await User.findById(req.user.id);
+      if (!user) { return res.status(404).json({msg: 'Unable to find user'}); }
+
+      const todo = await user.todos.find((id) => id.toString() === req.params.id);
+      if (!todo) { return res.status(404).json({msg: 'Unable to find todo in user todos'}); }
+
+      user.todos = user.todos.filter((id) => id.toString() !== req.params.id);
+
+      user = await user.save();
+
+      const {todos} = await user.populate('todos').execPopulate();
+
+      await Todo.findByIdAndDelete(req.params.id);
+
+      res.json({todos});
+    } catch (err) {
+      return res.status(500).json(err);
+    }
+  }
+);
+
 router.get('/all', passport.authenticate('jwt', {session: false}),
   async (req, res) => {
     try {
