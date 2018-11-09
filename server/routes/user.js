@@ -1,10 +1,18 @@
 const bcrypt = require('bcryptjs');
 const express = require('express');
 const jwt = require('jsonwebtoken');
+const passport = require('passport');
 
 const User = require('../models/User');
 
 const router = express.Router();
+
+router.get('/current', passport.authenticate('jwt', {session: false}),
+  (req, res) => res.json({
+    id: req.user.id,
+    email: req.user.email,
+  })
+);
 
 router.post('/login', async (req, res) => {
   const errMsg = 'Invalid email or password';

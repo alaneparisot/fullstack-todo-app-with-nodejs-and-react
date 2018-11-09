@@ -1,6 +1,7 @@
 const bodyParser = require('body-parser');
 const express = require('express');
 const mongoose = require('mongoose');
+const passport = require('passport');
 
 require('./config/config');
 
@@ -15,6 +16,9 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 app.use('/api/user', require('./routes/user'));
+
+app.use(passport.initialize());
+require('./config/passport')(passport);
 
 app.listen(
   process.env.PORT,
