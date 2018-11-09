@@ -16,6 +16,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 app.use('/api/user', require('./routes/user'));
+app.use('/api/todo', require('./routes/todo'));
 
 app.use(passport.initialize());
 require('./config/passport')(passport);
