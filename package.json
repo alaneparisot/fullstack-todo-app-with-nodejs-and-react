@@ -5,7 +5,7 @@
   "main": "server/server.js",
   "scripts": {
     "start": "npm start --prefix server",
-    "start-dev": "npm run start-dev --prefix server"
+    "dev": "npm run start-watch --prefix server"
   },
   "repository": {
     "type": "git",

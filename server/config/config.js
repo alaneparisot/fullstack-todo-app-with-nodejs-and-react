@@ -11,7 +11,9 @@ if (env === 'development') {
 Example of config.json:
 {
   "development": {
-    "MONGODB_URI": "mongodb://localhost:27017/HackerNewsReader",
+    "JWT_SECRET_OR_PRIVATE_KEY": "my-key",
+    "JWT_TOKEN_EXPIRATION_DELAY": "1h",
+    "MONGODB_URI": "mongodb://<dbuser>:<dbpassword>@<dbhost>:<dbport>/<dbname>",
     "PORT": 3000,
     "SALT_ROUNDS": 10
   }

@@ -1,9 +1,41 @@
 const bcrypt = require('bcryptjs');
 const express = require('express');
+const jwt = require('jsonwebtoken');
 
 const User = require('../models/User');
 
 const router = express.Router();
+
+router.post('/login', async (req, res) => {
+  const errMsg = 'Invalid email or password';
+
+  try {
+    const user = await User.findOne({email: req.body.email});
+
+    if (!user) { return res.status(400).json({msg: errMsg}); }
+
+    const match = await bcrypt.compare(req.body.password, user.password);
+
+    if (!match) { return res.status(400).json({msg: errMsg}); }
+
+    const payload = {
+      id: user.id,
+      email: user.email,
+    };
+
+    const secretOrPrivateKey = process.env.JWT_SECRET_OR_PRIVATE_KEY;
+
+    const options = {
+      expiresIn: process.env.JWT_TOKEN_EXPIRATION_DELAY
+    };
+
+    const token = await jwt.sign(payload, secretOrPrivateKey, options);
+
+    res.json({token});
+  } catch (err) {
+    return res.status(500).json(err);
+  }
+});
 
 router.post('/register', async (req, res) => {
   try {
