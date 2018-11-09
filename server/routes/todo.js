@@ -36,6 +36,36 @@ router.get('/:id', passport.authenticate('jwt', {session: false}),
   }
 );
 
+router.patch('/:id', passport.authenticate('jwt', {session: false}),
+  async (req, res) => {
+    try {
+      const user = await User.findById(req.user.id).populate('todos').exec();
+      if (!user) { return res.status(404).json({msg: 'Unable to find user'}); }
+
+      let todo = await user.todos.find((todo) => todo.id.toString() === req.params.id);
+      if (!todo) { return res.status(404).json({msg: 'Unable to find todo in user todos'}); }
+
+      const {_id, __v, ...lightTodo} = todo._doc;
+
+      for (const prop in lightTodo) {
+        if (req.body[prop]) {
+          lightTodo[prop] = req.body[prop];
+        }
+      }
+
+      todo = await Todo.findByIdAndUpdate(
+        req.params.id,
+        {$set: lightTodo},
+        {new: true},
+      );
+
+      return res.json({todo});
+    } catch (err) {
+      return res.status(500).json(err);
+    }
+  }
+);
+
 router.post('/new', passport.authenticate('jwt', {session: false}),
   async (req, res) => {
     try {
