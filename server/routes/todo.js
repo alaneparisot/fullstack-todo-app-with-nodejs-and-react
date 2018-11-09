@@ -6,6 +6,20 @@ const User = require('../models/User');
 
 const router = express.Router();
 
+router.get('/all', passport.authenticate('jwt', {session: false}),
+  async (req, res) => {
+    try {
+      const user = await User.findById(req.user.id).populate('todos').exec();
+
+      if (!user) { return res.status(404).json({msg: 'Unable to find user'}); }
+
+      res.json({todos: user.todos});
+    } catch (err) {
+      return res.status(500).json(err);
+    }
+  }
+);
+
 router.post('/new', passport.authenticate('jwt', {session: false}),
   async (req, res) => {
     try {
