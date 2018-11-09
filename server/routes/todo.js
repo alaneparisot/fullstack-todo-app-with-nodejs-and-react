@@ -20,6 +20,22 @@ router.get('/all', passport.authenticate('jwt', {session: false}),
   }
 );
 
+router.get('/:id', passport.authenticate('jwt', {session: false}),
+  async (req, res) => {
+    try {
+      const user = await User.findById(req.user.id).populate('todos').exec();
+      if (!user) { return res.status(404).json({msg: 'Unable to find user'}); }
+
+      const todo = await user.todos.find((todo) => todo.id.toString() === req.params.id);
+      if (!todo) { return res.status(404).json({msg: 'Unable to find todo in user todos'}); }
+
+      return res.json({todo});
+    } catch (err) {
+      return res.status(500).json(err);
+    }
+  }
+);
+
 router.post('/new', passport.authenticate('jwt', {session: false}),
   async (req, res) => {
     try {
