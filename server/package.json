@@ -1,11 +1,11 @@
 {
   "name": "fullstack-todo-app-with-nodejs-and-react",
+  "author": "Alane Parisot",
+  "license": "MIT",
   "scripts": {
     "start": "node server",
     "start-watch": "nodemon server"
   },
-  "author": "Alane Parisot",
-  "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",

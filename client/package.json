@@ -1,7 +1,7 @@
 {
-  "name": "client",
-  "version": "0.1.0",
-  "private": true,
+  "name": "fullstack-todo-app-with-nodejs-and-react",
+  "author": "Alane Parisot",
+  "license": "MIT",
   "dependencies": {
     "react": "^16.6.1",
     "react-dom": "^16.6.1",
