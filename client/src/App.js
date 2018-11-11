@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import styled from "styled-components";
+import { Provider } from 'react-redux';
+import Grid from '@material-ui/core/Grid';
+import styled from 'styled-components';
 
-import Home from "./components/Home";
-import Navbar from "./components/Navbar";
+import Home from './components/Home';
+import Navbar from './containers/Navbar';
+import Register from './containers/Register';
 
-import unsplashBadgeHTML from "./assets/html/unsplashBadge";
+import store from './redux/store';
+import unsplashBadgeHTML from './assets/html/unsplashBadge';
 
 const Routes = styled.div`
   margin-top: 10%;
@@ -17,6 +21,7 @@ const Footer = styled.div`
   text-align: center;
   bottom: 1%;
   left: 0;
+  z-index: -1;
 `;
 
 const UnsplashBadge = styled.div`
@@ -30,19 +35,22 @@ const UnsplashBadge = styled.div`
 class App extends Component {
   render() {
     return (
-      <Router>
-        <div>
-          <Navbar/>
+      <Provider store={store}>
+        <Router>
+          <Grid container justify="center">
+            <Navbar/>
 
-          <Routes>
-            <Route exact path="/" component={Home}/>
-          </Routes>
+            <Routes>
+              <Route exact path="/" component={Home}/>
+              <Route exact path="/register" component={Register}/>
+            </Routes>
 
-          <Footer>
-            <UnsplashBadge dangerouslySetInnerHTML={{__html: unsplashBadgeHTML}}/>
-          </Footer>
-        </div>
-      </Router>
+            <Footer>
+              <UnsplashBadge dangerouslySetInnerHTML={{__html: unsplashBadgeHTML}}/>
+            </Footer>
+          </Grid>
+        </Router>
+      </Provider>
     );
   }
 }
