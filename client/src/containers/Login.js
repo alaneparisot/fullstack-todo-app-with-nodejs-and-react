@@ -13,7 +13,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 
-import { registerUser } from '../redux/actions/authActions';
+import { loginUser } from '../redux/actions/authActions';
 
 const styles = theme => ({
   main: {
@@ -52,7 +52,7 @@ const styles = theme => ({
   },
 });
 
-class Register extends Component {
+class Login extends Component {
   state = {
     email: '',
     password: '',
@@ -61,6 +61,10 @@ class Register extends Component {
 
   // TODO: Use `getDerivedStateFromProps`
   componentWillReceiveProps(nextProps) {
+    if (nextProps.auth.isAuthenticated) {
+      this.props.history.push('/'); // TODO: Redirect to "todos" view
+    }
+
     if (nextProps.errors) {
       this.setState({errors: nextProps.errors});
     }
@@ -76,7 +80,7 @@ class Register extends Component {
     const {email, password} = this.state;
     const newUser = {email, password};
 
-    this.props.registerUser(newUser, this.props.history);
+    this.props.loginUser(newUser, this.props.history);
   };
 
   render() {
@@ -89,7 +93,7 @@ class Register extends Component {
             <LockIcon/>
           </Avatar>
           <Typography component="h1" variant="h5">
-            Register
+            Login
           </Typography>
           <form className={classes.form} onSubmit={this.handleSubmit}>
             <FormControl margin="normal" required fullWidth>
@@ -109,7 +113,7 @@ class Register extends Component {
               color="default"
               className={classes.submit}
             >
-              Register
+              Login
             </Button>
           </form>
         </Paper>
@@ -128,13 +132,15 @@ class Register extends Component {
   }
 }
 
-Register.propTypes = {
-  registerUser: PropTypes.func.isRequired,
+Login.propTypes = {
+  loginUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
+  auth: state.auth,
   errors: state.errors,
 });
 
@@ -142,5 +148,5 @@ const mapStateToProps = (state) => ({
 export default compose(
   withRouter,
   withStyles(styles),
-  connect(mapStateToProps, {registerUser}),
-)(Register);
+  connect(mapStateToProps, {loginUser}),
+)(Login);

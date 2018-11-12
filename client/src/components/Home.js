@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import styled from "styled-components";
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -10,7 +12,7 @@ const StyledLink = styled(Link)`
   text-decoration-line: none;
 `;
 
-const Home = () => {
+const Home = (props) => {
   return (
     <div>
       <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
@@ -21,16 +23,39 @@ const Home = () => {
       </Typography>
 
       <Grid container spacing={16} justify="center">
-        <Grid item>
-          <Button variant="outlined" color="default">
-            <StyledLink to="/register">
-              Register
-            </StyledLink>
-          </Button>
-        </Grid>
+        {!props.auth.isAuthenticated ? (
+          <>
+            <Grid item>
+              <StyledLink to="/login">
+                <Button variant="outlined" color="default">
+                  Login
+                </Button>
+              </StyledLink>
+            </Grid>
+            < Grid item>
+              < StyledLink to="/register">
+                <Button variant="outlined" color="default">
+                  Register
+                </Button>
+              </StyledLink>
+            </Grid>
+          </>
+        ) : (
+          <Typography variant="body2" align="center" color="textSecondary" paragraph>
+            Logged in as {props.auth.user.email}.
+          </Typography>
+        )}
       </Grid>
     </div>
   );
 };
 
-export default Home;
+Home.propTypes = {
+  auth: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
+
+export default connect(mapStateToProps, {})(Home);

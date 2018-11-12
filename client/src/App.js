@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import jwt_decode from 'jwt-decode';
 import Grid from '@material-ui/core/Grid';
 import styled from 'styled-components';
 
 import Home from './components/Home';
 import Navbar from './containers/Navbar';
+import Login from './containers/Login';
 import Register from './containers/Register';
-
+import setAuthToken from './utils/setAuthToken';
+import { setCurrentUser } from './redux/actions/authActions';
 import store from './redux/store';
 import unsplashBadgeHTML from './assets/html/unsplashBadge';
 
@@ -32,6 +35,12 @@ const UnsplashBadge = styled.div`
   }
 `;
 
+if (localStorage.jwtToken) {
+  setAuthToken(localStorage.jwtToken);
+  const decoded = jwt_decode(localStorage.jwtToken);
+  store.dispatch(setCurrentUser(decoded));
+}
+
 class App extends Component {
   render() {
     return (
@@ -42,6 +51,7 @@ class App extends Component {
 
             <Routes>
               <Route exact path="/" component={Home}/>
+              <Route exact path="/login" component={Login}/>
               <Route exact path="/register" component={Register}/>
             </Routes>
 

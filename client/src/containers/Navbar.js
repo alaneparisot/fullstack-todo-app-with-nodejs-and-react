@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import AppBar from '@material-ui/core/AppBar';
 import IconButton from '@material-ui/core/IconButton';
@@ -14,6 +14,8 @@ const AppName = styled(Typography)`
 `;
 
 const StyledLink = styled(Link)`
+  height: 100%;
+  with: 100%;
   color: inherit;
   text-decoration-line: none;
 `;
@@ -27,8 +29,12 @@ class Navbar extends Component {
     this.setState({menuIconEl: event.currentTarget});
   };
 
-  handleMenuClose = () => {
+  handleMenuClose = (destination) => {
     this.setState({menuIconEl: null});
+
+    if (destination) {
+      this.props.history.push('/' + destination);
+    }
   };
 
   render() {
@@ -53,10 +59,11 @@ class Navbar extends Component {
             open={Boolean(menuIconEl)}
             onClose={this.handleMenuClose}
           >
-            <MenuItem onClick={this.handleMenuClose}>
-              <StyledLink to="/register">
-                Register
-              </StyledLink>
+            <MenuItem onClick={() => this.handleMenuClose('login')}>
+              Login
+            </MenuItem>
+            <MenuItem onClick={() => this.handleMenuClose('register')}>
+              Register
             </MenuItem>
           </Menu>
 
@@ -66,4 +73,4 @@ class Navbar extends Component {
   }
 }
 
-export default Navbar;
+export default withRouter(Navbar);
