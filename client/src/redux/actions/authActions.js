@@ -7,7 +7,7 @@ import setAuthToken from '../../utils/setAuthToken';
 export const registerUser = (user, history) => async (dispatch) => {
   try {
     await axios.post('/api/user/register', user);
-    history.push('/');
+    history.push('/login');
   } catch (err) {
     dispatch({
       type: GET_ERRORS,
@@ -29,6 +29,13 @@ export const loginUser = (user) => async (dispatch) => {
       payload: err.response.data
     });
   }
+};
+
+export const logoutUser = (history) => (dispatch) => {
+  localStorage.removeItem('jwtToken');
+  setAuthToken(false);
+  dispatch(setCurrentUser({}));
+  if (history) { history.push('/'); }
 };
 
 export const setCurrentUser = (decoded) => ({

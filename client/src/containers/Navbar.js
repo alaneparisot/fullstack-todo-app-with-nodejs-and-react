@@ -8,6 +8,11 @@ import MenuIcon from '@material-ui/icons/MoreVert';
 import MenuItem from '@material-ui/core/MenuItem';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import { compose } from "recompose";
+import connect from "react-redux/es/connect/connect";
+import PropTypes from "prop-types";
+
+import { logoutUser } from '../redux/actions/authActions';
 
 const AppName = styled(Typography)`
   flex-grow: 1;
@@ -32,7 +37,9 @@ class Navbar extends Component {
   handleMenuClose = (destination) => {
     this.setState({menuIconEl: null});
 
-    if (destination) {
+    if (destination === 'logout') {
+      this.props.logoutUser(this.props.history);
+    } else if (typeof destination === 'string') {
       this.props.history.push('/' + destination);
     }
   };
@@ -59,12 +66,20 @@ class Navbar extends Component {
             open={Boolean(menuIconEl)}
             onClose={this.handleMenuClose}
           >
-            <MenuItem onClick={() => this.handleMenuClose('login')}>
-              Login
-            </MenuItem>
-            <MenuItem onClick={() => this.handleMenuClose('register')}>
-              Register
-            </MenuItem>
+            {!this.props.auth.isAuthenticated ? (
+              <>
+                <MenuItem onClick={() => this.handleMenuClose('login')}>
+                  Login
+                </MenuItem>
+                <MenuItem onClick={() => this.handleMenuClose('register')}>
+                  Register
+                </MenuItem>
+              </>
+            ) : (
+              <MenuItem onClick={() => this.handleMenuClose('logout')}>
+                Logout
+              </MenuItem>
+            )}
           </Menu>
 
         </Toolbar>
@@ -73,4 +88,17 @@ class Navbar extends Component {
   }
 }
 
-export default withRouter(Navbar);
+Navbar.propTypes = {
+  auth: PropTypes.object.isRequired,
+  logoutUser: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
+
+// TODO: Use Hooks
+export default compose(
+  withRouter,
+  connect(mapStateToProps, {logoutUser}),
+)(Navbar);
