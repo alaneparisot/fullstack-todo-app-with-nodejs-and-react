@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import styled from "styled-components";
+import styled from 'styled-components';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -15,10 +15,6 @@ const StyledLink = styled(Link)`
 `;
 
 const Home = (props) => {
-  const handleLogout = () => {
-    props.logoutUser();
-  };
-
   return (
     <div>
       <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
@@ -37,8 +33,8 @@ const Home = (props) => {
               </Button>
             </StyledLink>
           </Grid>
-          < Grid item>
-            < StyledLink to="/register">
+          <Grid item>
+            <StyledLink to="/register">
               <Button variant="outlined" color="default">
                 Register
               </Button>
@@ -52,9 +48,11 @@ const Home = (props) => {
           </Typography>
           <Grid container spacing={16} justify="center">
             <Grid item>
-              <Button variant="outlined" color="default" onClick={handleLogout}>
-                Logout
-              </Button>
+              <StyledLink to="/todos">
+                <Button variant="outlined" color="default">
+                  View My Todos
+                </Button>
+              </StyledLink>
             </Grid>
           </Grid>
         </>

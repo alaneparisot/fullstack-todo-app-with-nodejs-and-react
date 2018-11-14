@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import jwt_decode from 'jwt-decode';
 import Grid from '@material-ui/core/Grid';
@@ -9,6 +9,8 @@ import Home from './components/Home';
 import Navbar from './containers/Navbar';
 import Login from './containers/Login';
 import Register from './containers/Register';
+import PrivateRoute from './components/common/PrivateRoute';
+import Todos from './containers/Todos';
 import setAuthToken from './utils/setAuthToken';
 import { setCurrentUser } from './redux/actions/authActions';
 import store from './redux/store';
@@ -53,6 +55,9 @@ class App extends Component {
               <Route exact path="/" component={Home}/>
               <Route exact path="/login" component={Login}/>
               <Route exact path="/register" component={Register}/>
+              <Switch>
+                <PrivateRoute exact path="/todos" component={Todos}/>
+              </Switch>
             </Routes>
 
             <Footer>

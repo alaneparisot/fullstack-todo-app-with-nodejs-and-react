@@ -72,9 +72,7 @@ router.patch('/:id', passport.authenticate('jwt', {session: false}),
       const {_id, __v, ...lightTodo} = todo._doc;
 
       for (const prop in lightTodo) {
-        if (req.body[prop]) {
-          lightTodo[prop] = req.body[prop];
-        }
+        lightTodo[prop] = req.body[prop];
       }
 
       todo = await Todo.findByIdAndUpdate(
