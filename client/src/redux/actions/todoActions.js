@@ -3,6 +3,7 @@ import axios from 'axios';
 import { GET_TODOS, UPDATE_TODO, DELETE_TODO, GET_ERRORS, } from './types';
 
 export const getTodos = () => (dispatch) => {
+  // TODO: Use async/await
   axios
     .get('/api/todo/all')
     .then((res) => dispatch({
@@ -15,7 +16,23 @@ export const getTodos = () => (dispatch) => {
     }));
 };
 
+export const addTodo = (title) => async (dispatch) => {
+  try {
+    const todos = (await axios.post('/api/todo/new', {title})).data.todos;
+    dispatch({
+      type: GET_TODOS,
+      payload: todos
+    });
+  } catch (err) {
+    dispatch({
+      type: GET_ERRORS,
+      payload: err.response.data
+    });
+  }
+};
+
 export const updateTodo = (todo) => (dispatch) => {
+  // TODO: Use async/await
   axios
     .patch('/api/todo/' + todo._id, todo)
     .then((res) => dispatch({
@@ -29,6 +46,7 @@ export const updateTodo = (todo) => (dispatch) => {
 };
 
 export const deleteTodo = (id) => (dispatch) => {
+  // TODO: Use async/await
   axios
     .delete('/api/todo/' + id)
     .then((res) => dispatch({

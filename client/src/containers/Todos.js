@@ -11,9 +11,11 @@ import Checkbox from '@material-ui/core/Checkbox/Checkbox';
 import IconButton from '@material-ui/core/IconButton/IconButton';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText/ListItemText';
+import TextField from '@material-ui/core/TextField/TextField';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-import { getTodos, updateTodo, deleteTodo } from '../redux/actions/todoActions';
+import { getTodos, addTodo, updateTodo, deleteTodo } from '../redux/actions/todoActions';
+import Button from '@material-ui/core/Button/Button';
 
 const styles = (theme) => ({
   root: {
@@ -28,11 +30,27 @@ const styles = (theme) => ({
     paddingTop: theme.spacing.unit * 2,
     paddingBottom: theme.spacing.unit * 2,
   },
+  paperTodoAdd: {
+    ...theme.mixins.gutters(),
+    maxWidth: 360,
+    marginTop: 36,
+    paddingTop: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit * 2,
+  },
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+  },
 });
 
 class Todos extends Component {
   state = {
     todos: [],
+    newTodoTitle: '',
     errors: null,
   };
 
@@ -57,6 +75,16 @@ class Todos extends Component {
     this.props.updateTodo(todo);
   };
 
+  handleNewTodoTitleChange = (event) => {
+    this.setState({newTodoTitle: event.target.value});
+  };
+
+  handleNewTodoSubmit = async (event) => {
+    event.preventDefault();
+    await this.props.addTodo(this.state.newTodoTitle);
+    this.setState({newTodoTitle: ''});
+  };
+
   render() {
     const {todos, errors} = this.state;
     const {classes} = this.props;
@@ -67,11 +95,13 @@ class Todos extends Component {
         <Checkbox
           checked={todo.isDone}
           tabIndex={-1}
+          color="default"
           disableRipple
         />
         <ListItemText primary={todo.title}/>
         <ListItemSecondaryAction>
-          <IconButton aria-label="Delete" onClick={() => this.handleTodoDelete(todo._id)}>
+          <IconButton aria-label="Delete"
+                      onClick={() => this.handleTodoDelete(todo._id)}>
             <DeleteIcon/>
           </IconButton>
         </ListItemSecondaryAction>
@@ -96,6 +126,33 @@ class Todos extends Component {
           </Typography>
         )}
 
+        <Paper className={classes.paperTodoAdd}>
+          <Typography variant="h5" align="center" gutterBottom>
+            Add a New Todo
+          </Typography>
+          <form className={classes.container}
+                noValidate autoComplete="off"
+                onSubmit={this.handleNewTodoSubmit}>
+            <TextField
+              id="standard-name"
+              label="Title"
+              className={classes.textField}
+              value={this.state.newTodoTitle}
+              onChange={this.handleNewTodoTitleChange}
+              margin="normal"
+              fullWidth
+            />
+            <Button
+              type="submit"
+              variant="contained"
+              color="default"
+              fullWidth
+            >
+              Add a New Todo
+            </Button>
+          </form>
+        </Paper>
+
         {errors && errors.msg ? (
           <Paper className={classes.paperError} elevation={1}>
             <Typography variant="h5" component="h3">
@@ -113,6 +170,7 @@ class Todos extends Component {
 
 Todos.propTypes = {
   getTodos: PropTypes.func.isRequired,
+  addTodo: PropTypes.func.isRequired,
   updateTodo: PropTypes.func.isRequired,
   deleteTodo: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
@@ -129,5 +187,5 @@ const mapStateToProps = (state) => ({
 
 export default compose(
   withStyles(styles),
-  connect(mapStateToProps, {getTodos, updateTodo, deleteTodo}),
+  connect(mapStateToProps, {getTodos, addTodo, updateTodo, deleteTodo}),
 )(Todos);
