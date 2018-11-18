@@ -1,8 +1,27 @@
-# fullstack-todo-app-with-nodejs-and-react
+# Fullstack To-do App with Node.js and React
 
 A simple to-do app to explore fullstack development, with Node.js and React.
 
 [Demo](https://alaneparisot-todo-nodejs-react.herokuapp.com) (you may need to wait 15-20 seconds for the page to load, since it's hosted freely on Heroku).
+
+## Local Installation
+
+In `package.json`, delete this line (used by Heroku):
+```bash
+"install": "npm i --prefix server",
+```
+
+Then, execute:
+```bash
+$ npm i && cd server && npm i && cd ../client && npm i && cd ..
+```
+
+Check out `server/config/config.js` to see the environment variables you need to configure.
+
+When you're ready, execute:
+```bash
+$ npm run dev
+```
 
 ## Technologies Involved
 
