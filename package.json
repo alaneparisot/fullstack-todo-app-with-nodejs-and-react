@@ -4,10 +4,12 @@
   "description": "A simple to-do app to explore fullstack development, with Node.js and React",
   "main": "server/server.js",
   "scripts": {
+    "install": "npm i --prefix server",
     "start": "npm start --prefix server",
     "server": "npm run start-watch --prefix server",
     "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm i --prefix client && npm run build --prefix client"
   },
   "repository": {
     "type": "git",
@@ -25,7 +27,7 @@
     "url": "https://github.com/alaneparisot/fullstack-todo-app-with-nodejs-and-react/issues"
   },
   "homepage": "https://github.com/alaneparisot/fullstack-todo-app-with-nodejs-and-react#readme",
-  "dependencies": {
+  "devDependencies": {
     "concurrently": "^4.0.1"
   }
 }
