@@ -1,6 +1,6 @@
 {
   "name": "fullstack-todo-app-with-nodejs-and-react",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A simple to-do app to explore fullstack development, with Node.js and React",
   "main": "server/server.js",
   "scripts": {
