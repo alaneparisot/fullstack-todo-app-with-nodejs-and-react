@@ -1,60 +1,56 @@
 import axios from 'axios';
 
-import { GET_TODOS, UPDATE_TODO, DELETE_TODO, GET_ERRORS, } from './types';
+import { GET_TODOS, UPDATE_TODO, DELETE_TODO, } from './types';
+import { clearErrors, dispatchErrors, } from './errorActions';
 
-export const getTodos = () => (dispatch) => {
-  // TODO: Use async/await
-  axios
-    .get('/api/todo/all')
-    .then((res) => dispatch({
-      type: GET_TODOS,
-      payload: res.data.todos
-    }))
-    .catch((err) => dispatch({
-      type: GET_ERRORS,
-      payload: err.response.data
-    }));
-};
-
-export const addTodo = (title) => async (dispatch) => {
+export const getTodos = () => async (dispatch) => {
   try {
-    const todos = (await axios.post('/api/todo/new', {title})).data.todos;
+    const {todos} = (await axios.get('/api/todo/all')).data;
     dispatch({
       type: GET_TODOS,
-      payload: todos
+      payload: todos,
     });
-  } catch (err) {
-    dispatch({
-      type: GET_ERRORS,
-      payload: err.response.data
-    });
+    clearErrors(dispatch);
+  } catch (e) {
+    dispatchErrors(dispatch, e.response.data);
   }
 };
 
-export const updateTodo = (todo) => (dispatch) => {
-  // TODO: Use async/await
-  axios
-    .patch('/api/todo/' + todo._id, todo)
-    .then((res) => dispatch({
-      type: UPDATE_TODO,
-      payload: res.data.todo
-    }))
-    .catch((err) => dispatch({
-      type: GET_ERRORS,
-      payload: err.response.data
-    }));
+export const addTodo = (todoTitle) => async (dispatch) => {
+  try {
+    const {todos} = (await axios.post('/api/todo/new', {title: todoTitle})).data;
+    dispatch({
+      type: GET_TODOS,
+      payload: todos,
+    });
+    clearErrors(dispatch);
+  } catch (e) {
+    dispatchErrors(dispatch, e.response.data);
+  }
 };
 
-export const deleteTodo = (id) => (dispatch) => {
-  // TODO: Use async/await
-  axios
-    .delete('/api/todo/' + id)
-    .then((res) => dispatch({
+export const updateTodo = (todoData) => async (dispatch) => {
+  try {
+    const {todo} = (await axios.patch('/api/todo/' + todoData._id, todoData)).data;
+    dispatch({
+      type: UPDATE_TODO,
+      payload: todo,
+    });
+    clearErrors(dispatch);
+  } catch (e) {
+    dispatchErrors(dispatch, e.response.data);
+  }
+};
+
+export const deleteTodo = (todoId) => async (dispatch) => {
+  try {
+    const {todos} = (await axios.delete('/api/todo/' + todoId)).data;
+    dispatch({
       type: DELETE_TODO,
-      payload: res.data.todos
-    }))
-    .catch((err) => dispatch({
-      type: GET_ERRORS,
-      payload: err.response.data
-    }));
+      payload: todos,
+    });
+    clearErrors(dispatch);
+  } catch (e) {
+    dispatchErrors(dispatch, e.response.data);
+  }
 };

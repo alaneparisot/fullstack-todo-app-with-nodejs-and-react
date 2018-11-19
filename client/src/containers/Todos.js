@@ -51,7 +51,7 @@ class Todos extends Component {
   state = {
     todos: [],
     newTodoTitle: '',
-    errors: null,
+    errors: {},
   };
 
   componentWillReceiveProps(nextProps) {
